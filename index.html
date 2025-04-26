@@ -7,6 +7,118 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     /* Estilo geral do corpo da página */
+
+    body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #EDDDC4;
+  color: #283D3B;
+  position: relative;
+  padding: 20px;  /* Adicionando padding para melhorar a exibição em dispositivos móveis */
+}
+
+/* Estilo do tabuleiro do jogo */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 120px);
+  gap: 10px;
+  background-color: #283D3B;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px #00000033;
+  margin-top: 130px;
+  padding: 20px;
+}
+
+/* Estilo das células do tabuleiro */
+.cell {
+  width: 120px;
+  height: 120px;
+  font-size: 48px;
+  background-color: #EDD4C4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  border: 2px solid #C44536;
+  border-radius: 10px;
+}
+
+/* Responsividade para telas pequenas (ex: celulares) */
+@media screen and (max-width: 768px) {
+  /* Ajusta o tamanho do tabuleiro e células */
+  .board {
+    grid-template-columns: repeat(3, 100px);
+    padding: 15px;
+  }
+
+  .cell {
+    width: 100px;
+    height: 100px;
+    font-size: 36px; /* Ajusta o tamanho das letras */
+  }
+
+  /* Ajusta o tamanho do botão de reiniciar */
+  .restart-btn {
+    font-size: 16px;
+    padding: 10px 24px;
+  }
+
+  /* Ajusta o tamanho do título */
+  .menu-container h1 {
+    font-size: 36px;
+  }
+
+  /* Ajusta os botões do menu */
+  .menu-container button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+
+  /* Ajuste para a barra superior */
+  .top-bar {
+    font-size: 18px;
+    padding: 5px 15px;
+  }
+
+  .top-bar .player-name {
+    font-size: 20px;
+  }
+
+  /* Ajusta o campo de nickname */
+  .nickname-input input {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Responsividade para telas muito pequenas (ex: smartphones) */
+@media screen and (max-width: 480px) {
+  /* Ajusta ainda mais o tamanho das células */
+  .cell {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  /* Ajusta o tamanho do botão de reiniciar */
+  .restart-btn {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+
+  /* Ajuste para os botões do menu */
+  .menu-container button {
+    font-size: 14px;
+    padding: 8px 18px;
+  }
+}
     body {
       font-family: 'Arial', sans-serif;
       display: flex;
