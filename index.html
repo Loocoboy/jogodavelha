@@ -7,28 +7,24 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
         }
 
         #menu-inicial {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
+            text-align: center;
+            background-color: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         #menu-inicial h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         #menu-inicial input {
@@ -55,65 +51,148 @@
         }
 
         #game-container {
-            display: none; /* Inicialmente escondido */
             text-align: center;
+            background-color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            position: relative;
         }
 
         #score {
-            margin-top: 20px;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
+            margin-bottom: 10px;
+            color: black;
         }
 
         #game-status {
-            margin-top: 10px;
-            font-size: 18px;
+            font-size: 20px;
+            margin-bottom: 15px;
             font-weight: bold;
-            color: green;
-            min-height: 24px; /* Garante espaço mesmo sem mensagem */
         }
+
+        .win-message { color: green; }
+        .lose-message { color: red; }
+        .start-message { color: blue; }
 
         #board {
             display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 5px;
-            justify-content: center;
-            margin-top: 20px;
+            grid-template-columns: repeat(3, 120px);
+            grid-gap: 10px;
+            margin: 20px 0;
+            justify-items: center;
         }
 
         .square {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
+            background-color: #eee;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 24px;
-            background-color: #fff;
-            border: 2px solid #ccc;
+            align-items: center;
+            font-size: 2em;
             cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .square:hover {
-            background-color: #f1f1f1;
+            background-color: #ddd;
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .square.x {
+            color: #4848e2;
+            font-weight: bold;
+        }
+
+        .square.o {
+            color: #da4646;
+            font-weight: bold;
+        }
+
+        .square.x-move {
+            animation: zoomIn 0.5s ease;
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         #reset-btn {
-            margin-top: 20px;
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: #299de1;
+            background-color: #ff5733;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
         }
 
         #reset-btn:hover {
-            background-color: #299de1;
+            background-color: #e14c29;
         }
+
+        #main-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+#ranking-panel {
+    width: 200px;
+    background-color: #e9efff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+#ranking-panel h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #333;
+    background-color: #007bff; /* Cor de fundo do título */
+    color: white; /* Cor do texto */
+    padding: 10px;
+    border-radius: 5px; /* Borda arredondada para o título */
+}
+
+#ranking-info {
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+    padding: 5px;
+    background-color: #b3c7f9; /* Fundo do nome e pontuação */
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+#ranking-panel h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #333;
+    background-color: #007bff; /* Cor de fundo do título */
+    color: white; /* Cor do texto */
+    padding: 10px;
+    border-radius: 5px; /* Borda arredondada para o título */
+}
+
+
     </style>
 </head>
+
 <body>
     <div id="menu-inicial">
         <h1>Bem-vindo ao Jogo da Velha!</h1>
@@ -122,13 +201,341 @@
         <button onclick="startGame()">Entrar</button>
     </div>
 
-    <div id="game-container">
-        <div id="score">Pontuação: 0</div>
-        <div id="game-status"></div> <!-- STATUS LOGO ABAIXO DO SCORE -->
-        <div id="board"></div> <!-- TABULEIRO ABAIXO DO STATUS -->
-        <button id="reset-btn">Reiniciar Jogo</button>
+    <div id="main-wrapper" style="display: none;">
+        <div id="ranking-panel">
+            <h2>Ranking</h2>
+            <div id="ranking-info"></div>
+        </div>
+        <div id="game-container">
+            <div id="score">Pontuação: 0</div>
+            <div id="game-status"></div>
+            <div id="board"></div>
+            <button id="reset-btn">Reiniciar Jogo</button>
+        </div>
     </div>
+</body>
 
-    <script src="script.js"></script>
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let player = 'X';
+        let bot = 'O';
+        let gameOver = false;
+        let currentPlayer = player;
+        let firstBotMove = true;
+        let gameStarted = false;
+        let movesHistory = [];
+        let score = 0;
+        let playerName = '';
+
+        const boardElement = document.getElementById('board');
+        const resetButton = document.getElementById('reset-btn');
+        const gameStatus = document.getElementById('game-status');
+        const scoreElement = document.getElementById('score');
+        const menuInicial = document.getElementById('menu-inicial');
+        const gameContainer = document.getElementById('game-container');
+        const playerNameInput = document.getElementById('player-name');
+
+        function updateScore() {
+            scoreElement.textContent = `Pontuação: ${score}`;
+        }
+
+        function initializeBoard() {
+            boardElement.innerHTML = '';
+            board.forEach((cell, index) => {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                square.textContent = cell;
+                square.addEventListener('click', () => handlePlayerMove(index));
+                boardElement.appendChild(square);
+            });
+        }
+
+        function handlePlayerMove(index) {
+            if (board[index] === '' && currentPlayer === player && !gameOver) {
+                board[index] = player;
+                movesHistory.push({ player: 'X', index });
+                renderBoard();
+
+                const square = document.querySelectorAll('.square')[index];
+                square.classList.add('x-move');
+                setTimeout(() => square.classList.remove('x-move'), 500);
+
+                if (!gameStarted) {
+                    showStatusMessage('Jogo iniciado', '#808080');
+                    gameStarted = true;
+                }
+
+                if (checkWinner(player)) {
+                    showStatusMessage(`Você venceu, ${playerName}!`, '#4CAF50');
+                    gameOver = true;
+                    increaseScore();
+                    updateScore();
+                    return;
+                }
+
+                if (board.filter(cell => cell === '').length === 2) {
+                    removeOldMove();
+                }
+
+                currentPlayer = bot;
+                setTimeout(botMove, 300);
+            }
+        }
+
+        function botMove() {
+            if (firstBotMove) {
+                let availableMoves = board
+                    .map((value, index) => value === '' ? index : -1)
+                    .filter(index => index !== -1);
+                const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                board[randomMove] = bot;
+                movesHistory.push({ player: 'O', index: randomMove });
+                firstBotMove = false;
+            } else {
+                const bestMove = getBestMove();
+                board[bestMove] = bot;
+                movesHistory.push({ player: 'O', index: bestMove });
+            }
+
+            renderBoard();
+
+            if (checkWinner(bot)) {
+                showStatusMessage(`Você perdeu, ${playerName}!`, '#F44336');
+                gameOver = true;
+                decreaseScore();
+                updateScore();
+                return;
+            }
+
+            if (board.filter(cell => cell === '').length === 2) {
+                removeOldMove();
+            }
+
+            currentPlayer = player;
+        }
+
+        function removeOldMove() {
+            if (movesHistory.length > 0) {
+                const moveToRemove = movesHistory.shift();
+                board[moveToRemove.index] = '';
+                renderBoard();
+            }
+        }
+
+        function renderBoard() {
+            const squares = document.querySelectorAll('.square');
+            squares.forEach((square, index) => {
+                square.textContent = board[index];
+                if (board[index] === 'X') {
+                    square.className = 'square x';
+                } else if (board[index] === 'O') {
+                    square.className = 'square o';
+                } else {
+                    square.className = 'square';
+                }
+            });
+        }
+
+        function checkWinner(player) {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winningCombinations.some(([a, b, c]) => board[a] === player && board[b] === player && board[c] === player);
+        }
+
+        function getBestMove() {
+            let bestScore = -Infinity;
+            let move = null;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = bot;
+                    let score = minimax(board, 0, false);
+                    board[i] = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+            return move;
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            if (checkWinner(bot)) return 10 - depth;
+            if (checkWinner(player)) return depth - 10;
+            if (!board.includes('')) return 0;
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = bot;
+                        let score = minimax(board, depth + 1, false);
+                        board[i] = '';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = player;
+                        let score = minimax(board, depth + 1, true);
+                        board[i] = '';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameOver = false;
+            currentPlayer = player;
+            firstBotMove = true;
+            gameStarted = false;
+            movesHistory = [];
+            initializeBoard();
+            clearStatusMessage();
+            updateScore();
+        }
+
+        function startGame() {
+            playerName = playerNameInput.value.trim();
+            if (playerName !== '') {
+                menuInicial.style.display = 'none';
+                gameContainer.style.display = 'block';
+                resetGame();
+            } else {
+                alert('Por favor, insira seu nome!');
+            }
+        }
+
+        function decreaseScore() {
+            if (score > 0) {
+                let decreaseValue = Math.floor(Math.random() * 10) + 1;
+                score = Math.max(score - decreaseValue, 0);
+            }
+        }
+
+        function increaseScore() {
+            let increaseValue = Math.floor(Math.random() * 5) + 1;
+            score += increaseValue;
+        }
+
+        function showStatusMessage(message, color) {
+            gameStatus.textContent = message;
+            gameStatus.style.visibility = 'visible';
+            gameStatus.style.color = color;
+        }
+
+        function clearStatusMessage() {
+            gameStatus.textContent = '';
+            gameStatus.style.visibility = 'hidden';
+        }
+
+        resetButton.addEventListener('click', resetGame);
+
+        initializeBoard();
+        clearStatusMessage();
+
+        const mainWrapper = document.getElementById('main-wrapper');
+const rankingPanel = document.getElementById('ranking-panel');
+const rankingInfo = document.getElementById('ranking-info');
+let rankingAtualizado = false;
+
+function atualizarRanking() {
+    if (!rankingAtualizado && playerName !== '') {
+        rankingInfo.innerHTML = `${playerName}: ${score}`;
+        rankingAtualizado = true;
+    } else {
+        rankingInfo.innerHTML = `${playerName}: ${score}`;
+}
+}
+
+function startGame() {
+    playerName = playerNameInput.value.trim();
+    if (playerName !== '') {
+        menuInicial.style.display = 'none';
+        gameContainer.style.display = 'block';
+        mainWrapper.style.display = 'flex';
+        resetGame();
+    } else {
+        alert('Por favor, insira seu nome!');
+    }
+}
+
+// Atualize os métodos de vitória/derrota com chamada ao ranking
+function handlePlayerMove(index) {
+    if (board[index] === '' && currentPlayer === player && !gameOver) {
+        board[index] = player;
+        movesHistory.push({ player: 'X', index });
+        renderBoard();
+
+        const square = document.querySelectorAll('.square')[index];
+        square.classList.add('x-move');
+        setTimeout(() => square.classList.remove('x-move'), 500);
+
+        if (!gameStarted) {
+            showStatusMessage('Jogo iniciado', '#808080');
+            gameStarted = true;
+        }
+
+        if (checkWinner(player)) {
+            showStatusMessage(`Você venceu, ${playerName}!`, '#4CAF50');
+            gameOver = true;
+            increaseScore();
+            updateScore();
+            atualizarRanking();
+            return;
+        }
+
+        if (board.filter(cell => cell === '').length === 2) {
+            removeOldMove();
+        }
+
+        currentPlayer = bot;
+        setTimeout(botMove, 300);
+    }
+}
+
+function botMove() {
+    if (firstBotMove) {
+        let availableMoves = board
+            .map((value, index) => value === '' ? index : -1)
+            .filter(index => index !== -1);
+        const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        board[randomMove] = bot;
+        movesHistory.push({ player: 'O', index: randomMove });
+        firstBotMove = false;
+    } else {
+        const bestMove = getBestMove();
+        board[bestMove] = bot;
+        movesHistory.push({ player: 'O', index: bestMove });
+    }
+
+    renderBoard();
+
+    if (checkWinner(bot)) {
+        showStatusMessage(`Você perdeu, ${playerName}!`, '#F44336');
+        gameOver = true;
+        decreaseScore();
+        updateScore();
+        atualizarRanking();
+        return;
+    }
+
+    if (board.filter(cell => cell === '').length === 2) {
+        removeOldMove();
+    }
+
+    currentPlayer = player;
+}
+
+    </script>
 </body>
 </html>
